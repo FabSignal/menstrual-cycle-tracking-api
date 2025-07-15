@@ -128,15 +128,16 @@ exports.getPredictions = async (req, res) => {
     const { userId } = req.params;
     const cycles = await Cycle.find({ userId }).sort({ startDate: -1 });
 
-    if (cycles.length < 3) {
-      return res.json({ status: "insufficient_data" });
-    }
-
-    // Convertir a formato compatible con tu función
+    // Convertir a formato compatible
     const formattedCycles = cycles.map((cycle) => ({
       startDate: moment(cycle.startDate).format("YYYY-MM-DD"),
       duration: cycle.duration,
     }));
+
+    // Verificar que tenemos al menos 3 ciclos válidos
+    if (formattedCycles.length < 3) {
+      return res.json({ status: "insufficient_data" });
+    }
 
     const predictions = generatePredictions(formattedCycles);
     res.json(predictions);
