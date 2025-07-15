@@ -14,6 +14,7 @@ const allowedOrigins = [
   // Agrega aquí la URL de tu frontend cuando lo despliegues
   // Por ejemplo: 'https://tu-app-frontend.vercel.app'
   "https://fabsignal.github.io/Human_Resources_Project/",
+  "https://fabsignal.github.io",
 ];
 
 const corsOptions = {
