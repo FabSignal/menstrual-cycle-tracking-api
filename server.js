@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cycleRoutes = require("./routes/cycles");
-const authRoutes = require("./routes/auth");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -98,7 +97,7 @@ app.get("/", (req, res) => {
 });
  */
 // Usa las rutas de autenticación
-/* app.use("/api/auth", authRoutes);
+/* app.use("/api/auth", authRoutes);*/
 
 // Nueva ruta para predicciones
 app.get("/api/cycles/predictions/:userId", async (req, res) => {
@@ -119,7 +118,7 @@ app.get("/api/cycles/predictions/:userId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}); */
+});
 
 // Iniciar servidor
 app.listen(PORT, () => {
