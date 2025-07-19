@@ -29,7 +29,7 @@ const corsOptions = {
       callback(new Error("Bloqueado por política CORS"));
     }
   },
-  methods: "GET,POST,PUT,DELETE,OPTIONS",
+  methods: "GET,POST,PUT,DELETE", //,OPTIONS",
   credentials: true,
   optionsSuccessStatus: 200,
   allowedHeaders: [
@@ -41,7 +41,7 @@ const corsOptions = {
 };
 
 // Middleware
-app.options("*", cors(corsOptions));
+//app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 
