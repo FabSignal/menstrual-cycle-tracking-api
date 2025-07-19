@@ -52,10 +52,9 @@ mongoose
   .then(() => console.log("Conectado a MongoDB"))
   .catch((err) => console.error("Error conectando a MongoDB:", err));
 
-// Rutas : Eliminar por redundancia
-/* app.use("/api/cycles", cycleRoutes);
+app.use("/api/cycles", cycleRoutes);
 
-app.get("/", (req, res) => {
+/* app.get("/", (req, res) => {
   res.send("API de seguimiento menstrual funcionando correctamente");
 }); */
 
