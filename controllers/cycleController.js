@@ -95,7 +95,8 @@ function generatePredictions(cycles) {
 // Controlador para guardar un ciclo
 exports.createCycle = async (req, res) => {
   try {
-    const { userId, startDate, duration, symptoms } = req.body;
+    const { startDate, duration, symptoms } = req.body;
+    const userId = req.user.id; // Obtenido del token JWT
 
     const newCycle = new Cycle({
       userId,
@@ -114,7 +115,7 @@ exports.createCycle = async (req, res) => {
 // Controlador para obtener todos los ciclos de un usuario
 exports.getUserCycles = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id; // Obtenido del token JWT
     const cycles = await Cycle.find({ userId }).sort({ startDate: -1 });
     res.json(cycles);
   } catch (error) {

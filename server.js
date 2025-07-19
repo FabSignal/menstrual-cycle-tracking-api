@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cycleRoutes = require("./routes/cycles");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -74,6 +75,51 @@ app.get("/", (req, res) => {
       <li>GET /health - Verificar estado del servicio</li>
     </ul>
   `);
+});
+
+// Añade estas rutas adicionales
+const authRoutes = require("./routes/auth");
+
+// Middleware para autenticación
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api") && !req.path.includes("/auth")) {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Acceso no autorizado" });
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
+      next();
+    } catch (err) {
+      return res.status(401).json({ error: "Token inválido" });
+    }
+  } else {
+    next();
+  }
+});
+
+// Usa las rutas de autenticación
+app.use("/api/auth", authRoutes);
+
+// Nueva ruta para predicciones
+app.get("/api/cycles/predictions/:userId", async (req, res) => {
+  try {
+    const cycles = await Cycle.find({ userId: req.params.userId }).sort({
+      startDate: -1,
+    });
+
+    if (cycles.length < 3) {
+      return res.status(400).json({
+        status: "insufficient_data",
+        message: "Se necesitan al menos 3 ciclos registrados",
+      });
+    }
+
+    const predictions = generatePredictions(cycles);
+    res.json(predictions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Iniciar servidor
