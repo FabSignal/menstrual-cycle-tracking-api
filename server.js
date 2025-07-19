@@ -44,12 +44,12 @@ mongoose
   .then(() => console.log("Conectado a MongoDB"))
   .catch((err) => console.error("Error conectando a MongoDB:", err));
 
-// Rutas
-app.use("/api/cycles", cycleRoutes);
+// Rutas : Eliminar por redundancia
+/* app.use("/api/cycles", cycleRoutes);
 
 app.get("/", (req, res) => {
   res.send("API de seguimiento menstrual funcionando correctamente");
-});
+}); */
 
 // server.js (añade esto antes de app.listen)
 
@@ -73,15 +73,14 @@ app.get("/", (req, res) => {
       <li>POST /api/cycles - Crear nuevo ciclo</li>
       <li>GET /api/cycles/predictions/:userId - Obtener predicciones</li>
       <li>GET /health - Verificar estado del servicio</li>
+      <li>POST /api/auth/register - Registrar usuario</li>
+      <li>POST /api/auth/login - Iniciar sesión</li>
     </ul>
   `);
 });
 
-// Añade estas rutas adicionales
-const authRoutes = require("./routes/auth");
-
-// Middleware para autenticación
-app.use((req, res, next) => {
+// Middleware para autenticación : NO SE USARA JWT
+/* app.use((req, res, next) => {
   if (req.path.startsWith("/api") && !req.path.includes("/auth")) {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ error: "Acceso no autorizado" });
@@ -97,9 +96,9 @@ app.use((req, res, next) => {
     next();
   }
 });
-
+ */
 // Usa las rutas de autenticación
-app.use("/api/auth", authRoutes);
+/* app.use("/api/auth", authRoutes);
 
 // Nueva ruta para predicciones
 app.get("/api/cycles/predictions/:userId", async (req, res) => {
@@ -120,9 +119,15 @@ app.get("/api/cycles/predictions/:userId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+}); */
 
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
+});
+
+// Middleware para errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Algo salió mal!");
 });
