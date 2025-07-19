@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:3000",
+  "http://127.0.0.1:3002",
   // Agrega aquí la URL de tu frontend cuando lo despliegues
   // Por ejemplo: 'https://tu-app-frontend.vercel.app'
   "https://fabsignal.github.io/Human_Resources_Project/",
@@ -28,12 +29,19 @@ const corsOptions = {
       callback(new Error("Bloqueado por política CORS"));
     }
   },
-  methods: "GET,POST,PUT,DELETE",
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
   credentials: true,
   optionsSuccessStatus: 200,
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+  ],
 };
 
 // Middleware
+app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 
