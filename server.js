@@ -107,7 +107,7 @@ app.get("/", (req, res) => {
 /* app.use("/api/auth", authRoutes);*/
 
 // Ruta para obtener ciclos de un usuario (AGREGAR ESTO)
-app.get("/api/cycles/:userId", async (req, res) => {
+/* app.get("/api/cycles/:userId", async (req, res) => {
   try {
     const cycles = await Cycle.find({ userId: req.params.userId }).sort({
       startDate: -1,
@@ -127,6 +127,26 @@ app.get("/api/cycles/predictions/:userId", async (req, res) => {
 
     if (cycles.length < 3) {
       return res.status(400).json({
+        status: "insufficient_data",
+        message: "Se necesitan al menos 3 ciclos registrados",
+      });
+    }
+
+    const predictions = generatePredictions(cycles);
+    res.json(predictions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}); */
+
+// En server.js
+app.get("/api/cycles/predictions/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const cycles = await Cycle.find({ userId }).sort({ startDate: -1 });
+
+    if (cycles.length < 3) {
+      return res.status(200).json({
         status: "insufficient_data",
         message: "Se necesitan al menos 3 ciclos registrados",
       });
