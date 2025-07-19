@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cycleRoutes = require("./routes/cycles");
+const Cycle = require("./models/Cycle");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -47,7 +48,10 @@ app.use(express.json());
 
 // Conexión a MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Conectado a MongoDB"))
   .catch((err) => console.error("Error conectando a MongoDB:", err));
 
@@ -57,8 +61,6 @@ mongoose
 app.get("/", (req, res) => {
   res.send("API de seguimiento menstrual funcionando correctamente");
 }); */
-
-// server.js (añade esto antes de app.listen)
 
 // Ruta de verificación de estado
 app.get("/health", (req, res) => {
@@ -106,6 +108,18 @@ app.get("/", (req, res) => {
  */
 // Usa las rutas de autenticación
 /* app.use("/api/auth", authRoutes);*/
+
+// Ruta para obtener ciclos de un usuario (AGREGAR ESTO)
+app.get("/api/cycles/:userId", async (req, res) => {
+  try {
+    const cycles = await Cycle.find({ userId: req.params.userId }).sort({
+      startDate: -1,
+    });
+    res.json(cycles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Nueva ruta para predicciones
 app.get("/api/cycles/predictions/:userId", async (req, res) => {
