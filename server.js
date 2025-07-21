@@ -2,8 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
+// IMPORTAR rutas
 const cycleRoutes = require("./routes/cycles");
 const Cycle = require("./models/Cycle");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -51,6 +54,8 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("Conectado a MongoDB"))
   .catch((err) => console.error("Error conectando a MongoDB:", err));
+
+app.use("/api/auth", authRoutes);
 
 app.use("/api/cycles", cycleRoutes);
 
@@ -139,7 +144,7 @@ app.get("/api/cycles/predictions/:userId", async (req, res) => {
 }); */
 
 // En server.js
-app.get("/api/cycles/predictions/:userId", async (req, res) => {
+/* app.get("/api/cycles/predictions/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const cycles = await Cycle.find({ userId }).sort({ startDate: -1 });
@@ -156,15 +161,58 @@ app.get("/api/cycles/predictions/:userId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+}); */
 
 // Middleware para errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Algo salió mal!");
+});
+
+/* router.get("/cycles/predictions/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const cycles = await Cycle.find({ userId }).sort({ startDate: 1 });
+
+    console.log("Ciclos recuperados del usuario:", cycles); // ⬅️ AGREGAR ESTO
+
+    if (!cycles || cycles.length < 3) {
+      return res.status(400).json({
+        status: "insufficient_data",
+        message: "Se necesitan al menos 3 ciclos registrados",
+      });
+    }
+
+    const predictions = generatePredictions(cycles);
+    res.json(predictions);
+  } catch (error) {
+    res.status(500).json({ error: "Error al generar predicciones" });
+  }
+}); */
+
+// Ruta para predicción de ciclos por usuario
+/* app.get("/cycles/predictions/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const cycles = await Cycle.find({ userId }).sort({ startDate: 1 });
+
+    console.log("Ciclos recuperados del usuario:", cycles); // Debug
+
+    if (!cycles || cycles.length < 3) {
+      return res.status(400).json({
+        status: "insufficient_data",
+        message: "Se necesitan al menos 3 ciclos registrados",
+      });
+    }
+
+    const predictions = generatePredictions(cycles);
+    return res.json(predictions);
+  } catch (error) {
+    console.error("Error en predicción:", error);
+    return res.status(500).json({ error: "Error al generar predicciones" });
+  }
+}); */
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
