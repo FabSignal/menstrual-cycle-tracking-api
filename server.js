@@ -20,6 +20,7 @@ const allowedOrigins = [
   // Por ejemplo: 'https://tu-app-frontend.vercel.app'
   "https://fabsignal.github.io/Human_Resources_Project/",
   "https://fabsignal.github.io",
+  "https://fabsignal.github.io/salud_a_mano/",
 ];
 
 const corsOptions = {
