@@ -116,39 +116,25 @@ function getPregnancyProbability(currentCycleDay, avgCycleLength) {
     currentCycleDay >= fertileWindowStart &&
     currentCycleDay <= fertileWindowEnd
   ) {
-    // Dentro de la ventana fértil
-    if (
-      currentCycleDay >= ovulationDay - 2 &&
-      currentCycleDay <= ovulationDay
-    ) {
-      return {
-        level: "very_high",
-        description: "Muy alta",
-        percentage: "Máxima fertilidad", // Sin porcentaje numérico
-        message: "Días de máxima fertilidad",
-      };
-    } else {
-      return {
-        level: "high",
-        description: "Alta",
-        percentage: "Alta fertilidad",
-        message: "Días de alta fertilidad",
-      };
-    }
+    return {
+      level: "high",
+      description: "Alta",
+      percentage: "Alta fertilidad",
+      message: "Alta probabilidad de quedar embarazada",
+    };
   } else if (Math.abs(currentCycleDay - ovulationDay) <= 3) {
-    // Cerca de la ventana fértil
     return {
       level: "moderate",
-      description: "Moderada",
+      description: "Media",
       percentage: "Fertilidad moderada",
-      message: "Fertilidad moderada",
+      message: "Probabilidad de quedar embarazada en aumento",
     };
   } else {
     return {
       level: "low",
       description: "Baja",
-      percentage: "Baja fertilidad",
-      message: "Baja posibilidad de quedar embarazada",
+      percentage: "Fertilidad baja",
+      message: "Baja probabilidad de quedar embarazada",
     };
   }
 }
